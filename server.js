@@ -52,8 +52,10 @@ function start(interval) {
 
 function learn(reaction) {
 	let serverPing = BUFFER.find((d) => d.index === reaction.index);
-	let reactionTime = reaction.time - serverPing.time;
-	serverPing && DATA.push([ serverPing.success, reactionTime < serverPing.success ? "Yes" : "No", reactionTime]);
+	if (serverPing) {
+		let reactionTime = reaction.time - serverPing.time;
+		DATA.push([ serverPing.success, reactionTime < serverPing.success ? "Yes" : "No", reactionTime]);
+	}
 }
 
 io.on('connection', (socket) => {
