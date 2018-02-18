@@ -25,6 +25,8 @@ function start(interval) {
 	const min = LAG_TIME * 0;
 
 	setInterval(() => {
+		// we will gather a data set
+		// to learn the trends
 		if (count < 20) {
 			console.log(`SERVER : Now ${count}`);
 			BUFFER.push({index: count, time : Date.now(), success : (Math.random() * (max - min) + min)});
