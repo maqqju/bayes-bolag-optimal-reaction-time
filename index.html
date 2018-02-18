@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.slim.js"></script>
+	<title>Bolag Bayes - Optimal Reaction Time</title>
+	<script type="text/javascript">
+		let socket = io();
+	</script>
+</head>
+<body>
+	Hello
+	<!-- <button id="testButton">Click me</button> -->
+	<ul id="pingClicks">
+		
+	</ul>
+	<script type="text/javascript">
+		const INTERVAL = 2000;
+		const LAG_TIME = 500;
+		const max = LAG_TIME * 1.5;
+		const min = LAG_TIME * 0;
+
+		document.addEventListener("DOMContentLoaded", () => {
+			socket.emit("loaded", { interval : INTERVAL});
+			let variable = Math.random() * (max - min) + min;
+			let count = 0;
+
+			let sendMessage = (payload) => socket.emit("clicked", payload);
+			setInterval(() => {
+				if (count < 20) {
+					setTimeout(sendMessage.bind(null, { message : variable, index : count}), variable);
+					variable = Math.random() * (max - min) + min;
+					count++;
+				}
+			}, INTERVAL)
+		});
+	</script>
+</body>
+</html>
