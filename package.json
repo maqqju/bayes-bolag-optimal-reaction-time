@@ -11,7 +11,10 @@
     "bayes",
     "network"
   ],
-  "author": "matthewcroker@gmail.com",
+  "author": "matthewcroker_AT_gmail.com",
+  "contributors" : [
+    "bahman_AT_bahmanm.com"
+  ],
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.2",
