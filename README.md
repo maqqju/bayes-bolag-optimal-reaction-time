@@ -1,4 +1,4 @@
-#Bayes Bolag Optimal Reaction Time
+Bayes Bolag Optimal Reaction Time
 ==================================
 
 ## Background Story
