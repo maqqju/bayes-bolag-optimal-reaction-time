@@ -5,7 +5,7 @@ const bayes = require("node-bayes");
 
 let PORT = 3000;
 
-const TRAINING_COLUMNS = ["server_time","jump","reactionTime?"];
+const TRAINING_COLUMNS = ["expectation","jump?"];
 
 const BUFFER = [];
 
@@ -16,7 +16,7 @@ app.get("/", (req,res) => {
 })
 
 function start(interval) {
-	let count = 0;
+	let count = 1;
 	let learned = false;
 	let cls;
 
@@ -27,26 +27,26 @@ function start(interval) {
 	setInterval(() => {
 		// we will gather a data set
 		// to learn the trends
-		if (count < 20) {
-			console.log(`SERVER : Now ${count}`);
-			BUFFER.push({index: count, time : Date.now(), success : (Math.random() * (max - min) + min)});
-			count++;
-		} else {
-
-			if (!learned) {
-				console.log("TRAINING DATA", JSON.stringify(DATA));
-				cls = new bayes.NaiveBayes({
-					columns : TRAINING_COLUMNS,
-					data : DATA,
-					verbose : true
-				});
-
-				cls.train();
-				learned = true;
+		if (count % 20) {
+			if (learned) {
+				console.log(cls.predict([(Math.random() * (max - min) + min)]));
+				learned = false;
 			} else {
-				console.log(cls.predict([(Math.random() * (max - min) + min), "Yes"]));
+				console.log(`SERVER : Now ${count}`);
+				BUFFER.push({index: count, time : Date.now(), success : (Math.random() * (max - min) + min)});
 			}
-		} 
+		} else {
+			console.log("TRAINING DATA", JSON.stringify(DATA));
+			cls = new bayes.NaiveBayes({
+				columns : TRAINING_COLUMNS,
+				data : DATA,
+				verbose : true
+			});
+
+			cls.train();
+			learned = true;
+		}
+		count++;
 	}, interval);
 }
 
@@ -54,7 +54,7 @@ function learn(reaction) {
 	let serverPing = BUFFER.find((d) => d.index === reaction.index);
 	if (serverPing) {
 		let reactionTime = reaction.time - serverPing.time;
-		DATA.push([ serverPing.success, reactionTime < serverPing.success ? "Yes" : "No", reactionTime]);
+		DATA.push([ serverPing.success, reactionTime < serverPing.success ? "Yes" : "No"]);
 	}
 }
 
