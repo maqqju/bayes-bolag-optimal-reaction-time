@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.slim.js"></script>
+	<title>Bolag Bayes - Client Challenger</title>
+	<script type="text/javascript">
+		let socket = io();
+	</script>
+</head>
+<body>
+
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", () => {
+			const INTERVAL = 2000;
+
+			socket.emit("challenger-loaded", { interval : INTERVAL});
+		});
+	</script>
+</body>
+</html>

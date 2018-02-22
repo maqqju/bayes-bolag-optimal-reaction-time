@@ -24,7 +24,7 @@
 			let variable = Math.random() * (max - min) + min;
 			let count = 1;
 
-			let sendMessage = (payload) => socket.emit("clicked", payload);
+			let sendMessage = (payload) => socket.emit("ping", payload);
 			setInterval(() => {
 				if (count % 20) {
 					setTimeout(sendMessage.bind(null, {message : variable, index : count, time : Date.now()}), variable);

@@ -4,7 +4,9 @@
   "description": "Trying to understand network lag time with bayes modelling",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prestart" : "browserify -r ./BolagLearning.module.js > learning.min.js ",
+    "start" : "node server.js"
   },
   "keywords": [
     "bolag",
