@@ -9,7 +9,7 @@ With every count, the Server has a level of expectation for the Client's respons
 
 Meanwhile, the Client suffers from a network lag, which fluctuates as time goes by and potentially arriving too late to the Server's level of expectation.
 
-In to always ping in an acceptable time, the Client's reply needs to arrive at the Server in an optimized value.
+At some instances the Client will fail to send its ping to the Server and so the Server will try to guess whether the Client would have pinged in time or not, depending on its own expectation.
 
 ## Solution
 

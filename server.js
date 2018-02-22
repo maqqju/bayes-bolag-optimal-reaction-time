@@ -5,7 +5,7 @@ const bayes = require("node-bayes");
 
 let PORT = 3000;
 
-const TRAINING_COLUMNS = ["expectation","jump?"];
+const TRAINING_COLUMNS = ["expectation","received?"];
 
 const BUFFER = [];
 
@@ -25,15 +25,15 @@ function start(interval) {
 	const min = LAG_TIME * 0;
 
 	setInterval(() => {
-		// we will gather a data set
-		// to learn the trends
 		if (count % 20) {
 			if (learned) {
-				console.log(cls.predict([(Math.random() * (max - min) + min)]));
+				let expectation = (Math.random() * (max - min) + min);
+				let prediction = cls.predict([expectation]);
+				console.log(`Would the client have responded according to the Server's expectation of ${expectation}? ${prediction.answer} (${prediction[prediction.answer]})`);
 				learned = false;
 			} else {
 				console.log(`SERVER : Now ${count}`);
-				BUFFER.push({index: count, time : Date.now(), success : (Math.random() * (max - min) + min)});
+				BUFFER.push({index: count, time : Date.now(), expectation : (Math.random() * (max - min) + min)});
 			}
 		} else {
 			console.log("TRAINING DATA", JSON.stringify(DATA));
@@ -50,11 +50,11 @@ function start(interval) {
 	}, interval);
 }
 
-function learn(reaction) {
-	let serverPing = BUFFER.find((d) => d.index === reaction.index);
+function learn(clientCall) {
+	let serverPing = BUFFER.find((d) => d.index === clientCall.index);
 	if (serverPing) {
-		let reactionTime = reaction.time - serverPing.time;
-		DATA.push([ serverPing.success, reactionTime < serverPing.success ? "Yes" : "No"]);
+		let reactionTime = clientCall.timeReceived - serverPing.time;
+		DATA.push([ serverPing.expectation, reactionTime < serverPing.expectation ? "Yes" : "No"]);
 	}
 }
 
@@ -66,7 +66,7 @@ io.on('connection', (socket) => {
 
 	socket.on("clicked", (payload) => {
 		console.log(`CLIENT : Now ${payload.index}`);
-		learn({index : payload.index, time : Date.now()});
+		learn({index : payload.index, timeSent : payload.time, timeReceived : Date.now()});
 	});
 })
 

@@ -27,7 +27,7 @@
 			let sendMessage = (payload) => socket.emit("clicked", payload);
 			setInterval(() => {
 				if (count % 20) {
-					setTimeout(sendMessage.bind(null, {message : variable, index : count}), variable);
+					setTimeout(sendMessage.bind(null, {message : variable, index : count, time : Date.now()}), variable);
 					variable = Math.random() * (max - min) + min;
 				} 
 				count++;
