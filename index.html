@@ -2,6 +2,7 @@
 <html>
 <head>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.slim.js"></script>
+	<script src="bolag.min"></script>
 	<title>Bolag Bayes - Optimal Reaction Time</title>
 	<script type="text/javascript">
 		let socket = io();
@@ -9,7 +10,6 @@
 </head>
 <body>
 	Hello
-	<!-- <button id="testButton">Click me</button> -->
 	<ul id="pingClicks">
 		
 	</ul>
@@ -20,18 +20,26 @@
 		const min = LAG_TIME * 0;
 
 		document.addEventListener("DOMContentLoaded", () => {
-			socket.emit("loaded", { interval : INTERVAL});
-			let variable = Math.random() * (max - min) + min;
-			let count = 1;
+			let lagSufferer = new bolagBayes.LagSufferer(socket, {
+				interval : INTERVAL,
+				max : max,
+				min : min
+			});
 
-			let sendMessage = (payload) => socket.emit("ping", payload);
-			setInterval(() => {
-				if (count % 20) {
-					setTimeout(sendMessage.bind(null, {message : variable, index : count, time : Date.now()}), variable);
-					variable = Math.random() * (max - min) + min;
-				} 
-				count++;
-			}, INTERVAL)
+			lagSufferer.startPinging();
+
+			// socket.emit("loaded", { interval : INTERVAL});
+			// let variable = Math.random() * (max - min) + min;
+			// let count = 1;
+
+			// let sendMessage = (payload) => socket.emit("ping", payload);
+			// setInterval(() => {
+			// 	if (count % 20) {
+			// 		setTimeout(sendMessage.bind(null, {message : variable, index : count, time : Date.now()}), variable);
+			// 		variable = Math.random() * (max - min) + min;
+			// 	} 
+			// 	count++;
+			// }, INTERVAL)
 		});
 	</script>
 </body>

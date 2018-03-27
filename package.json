@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prestart" : "browserify -r ./BolagLearning.module.js > learning.min.js ",
+    "prestart" : "browserify -r ./*.module.js > bolag.min.js -s bolag-bayes",
     "start" : "node server.js"
   },
   "keywords": [
